@@ -4,7 +4,6 @@ import { appointments, users, services } from '@/lib/db/schema'
 import { eq, and, or } from 'drizzle-orm'
 import { sendReminder24h, sendReminder2h } from '@/lib/email'
 
-// Proteger com secret para que só o cron possa chamar
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -12,10 +11,17 @@ export async function GET(request: NextRequest) {
   }
 
   const now = new Date()
+  const today = now.toISOString().split('T')[0]
+
+  // Calcular amanhã
+  const tomorrow = new Date(now)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const tomorrowStr = tomorrow.toISOString().split('T')[0]
+
   let sent24h = 0
   let sent2h = 0
 
-  // Buscar agendamentos que precisam de lembrete
+  // Buscar agendamentos pendentes de lembrete
   const pendingAppointments = await db
     .select({
       id: appointments.id,
@@ -32,18 +38,12 @@ export async function GET(request: NextRequest) {
     .where(
       and(
         or(eq(appointments.status, 'agendado'), eq(appointments.status, 'confirmado')),
-        or(eq(appointments.reminder24hSent, false), eq(appointments.reminder2hSent, false))
+        or(eq(appointments.date, today), eq(appointments.date, tomorrowStr))
       )
     )
 
   for (const apt of pendingAppointments) {
-    const appointmentDate = new Date(`${apt.date}T${apt.startTime}`)
-    const hoursUntil = (appointmentDate.getTime() - now.getTime()) / (1000 * 60 * 60)
-
-    // Pular agendamentos passados
-    if (hoursUntil < 0) continue
-
-    // Buscar dados do cliente, profissional e serviço
+    // Buscar dados
     const [client] = await db.select({ name: users.name, email: users.email }).from(users).where(eq(users.id, apt.clientId)).limit(1)
     const [professional] = await db.select({ name: users.name }).from(users).where(eq(users.id, apt.professionalId)).limit(1)
     const [service] = await db.select({ name: services.name }).from(services).where(eq(services.id, apt.serviceId)).limit(1)
@@ -60,25 +60,25 @@ export async function GET(request: NextRequest) {
       appointmentId: apt.id,
     }
 
-    // Lembrete de 24h (enviar entre 24h e 22h antes)
-    if (!apt.reminder24hSent && hoursUntil <= 24 && hoursUntil > 22) {
+    // Lembrete 24h: agendamentos de AMANHÃ que ainda não receberam
+    if (apt.date === tomorrowStr && !apt.reminder24hSent) {
       try {
         await sendReminder24h(reminderData)
         await db.update(appointments).set({ reminder24hSent: true }).where(eq(appointments.id, apt.id))
         sent24h++
       } catch (e) {
-        console.error(`Erro ao enviar lembrete 24h para ${client.email}:`, e)
+        console.error(`Erro lembrete 24h para ${client.email}:`, e)
       }
     }
 
-    // Lembrete de 2h (enviar entre 2h e 1.5h antes)
-    if (!apt.reminder2hSent && hoursUntil <= 2 && hoursUntil > 1.5) {
+    // Lembrete 2h: agendamentos de HOJE (manhã) que ainda não receberam
+    if (apt.date === today && !apt.reminder2hSent) {
       try {
         await sendReminder2h(reminderData)
         await db.update(appointments).set({ reminder2hSent: true }).where(eq(appointments.id, apt.id))
         sent2h++
       } catch (e) {
-        console.error(`Erro ao enviar lembrete 2h para ${client.email}:`, e)
+        console.error(`Erro lembrete 2h para ${client.email}:`, e)
       }
     }
   }
@@ -87,5 +87,6 @@ export async function GET(request: NextRequest) {
     success: true,
     sent: { reminder24h: sent24h, reminder2h: sent2h },
     checked: pendingAppointments.length,
+    date: today,
   })
 }
