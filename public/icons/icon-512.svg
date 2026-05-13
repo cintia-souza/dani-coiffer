@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="100" fill="#ec4899"/>
+  <g transform="translate(256,240)">
+    <!-- Heart -->
+    <path d="M0,-50 C-25,-85 -75,-85 -75,-35 C-75,15 0,65 0,65 C0,65 75,15 75,-35 C75,-85 25,-85 0,-50Z" fill="#fff" opacity="0.9"/>
+    <!-- Scissors -->
+    <g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" transform="translate(0,70)">
+      <circle cx="-25" cy="25" r="16"/>
+      <circle cx="25" cy="25" r="16"/>
+      <line x1="-12" y1="12" x2="25" y2="-35"/>
+      <line x1="12" y1="12" x2="-25" y2="-35"/>
+    </g>
+  </g>
+  <text x="256" y="460" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="#fff">DaniCoiffer</text>
+</svg>

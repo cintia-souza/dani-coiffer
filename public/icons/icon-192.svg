@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="40" fill="#ec4899"/>
+  <g transform="translate(96,96)">
+    <!-- Heart -->
+    <path d="M0,-20 C-10,-35 -30,-35 -30,-15 C-30,5 0,25 0,25 C0,25 30,5 30,-15 C30,-35 10,-35 0,-20Z" fill="#fff" opacity="0.9" transform="translate(0,-10) scale(1.2)"/>
+    <!-- Scissors -->
+    <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" transform="translate(0,20)">
+      <circle cx="-10" cy="10" r="6"/>
+      <circle cx="10" cy="10" r="6"/>
+      <line x1="-5" y1="5" x2="10" y2="-15"/>
+      <line x1="5" y1="5" x2="-10" y2="-15"/>
+    </g>
+  </g>
+  <text x="96" y="170" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#fff">DC</text>
+</svg>
