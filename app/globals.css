@@ -1,6 +1,22 @@
 @import "tailwindcss";
 
 @theme inline {
+  --color-rosegold-50: #fef7f7;
+  --color-rosegold-100: #fdeef0;
+  --color-rosegold-200: #f9d4d9;
+  --color-rosegold-300: #e8a4ad;
+  --color-rosegold-400: #d4838f;
+  --color-rosegold-500: #b76e79;
+  --color-rosegold-600: #9e5a64;
+  --color-rosegold-700: #7d4750;
+  --color-rose-50: #fff1f4;
+  --color-rose-100: #ffe4eb;
+  --color-rose-200: #ffc9d8;
+  --color-rose-300: #ffa3bb;
+  --color-rose-400: #ff6b95;
+  --color-rose-500: #f43f6f;
+  --color-rose-600: #e11d55;
+  --color-rose-700: #be1244;
   --color-pink-50: #fdf2f8;
   --color-pink-100: #fce7f3;
   --color-pink-200: #fbcfe8;
@@ -9,12 +25,10 @@
   --color-pink-500: #ec4899;
   --color-pink-600: #db2777;
   --color-pink-700: #be185d;
-  --color-rose-50: #fff1f2;
-  --color-rose-100: #ffe4e6;
-  --color-primary: #db2777;
-  --color-primary-light: #f9a8d4;
+  --color-primary: #b76e79;
+  --color-primary-light: #e8a4ad;
   --color-background: #ffffff;
-  --color-foreground: #1f2937;
+  --color-foreground: #1a1a1a;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -30,7 +44,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #db2777;
+  outline: 2px solid #b76e79;
   outline-offset: 2px;
 }
 
@@ -45,29 +59,61 @@ body {
   white-space: nowrap;
 }
 
-/* Glassmorphism card */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+/* Luxurious gradients */
+.gradient-hero {
+  background: linear-gradient(135deg, #fffafa 0%, #fef7f7 30%, #fdeef0 60%, #fff5f7 100%);
 }
 
-/* Gradient backgrounds */
-.gradient-hero {
-  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 30%, #fbcfe8 60%, #fdf2f8 100%);
+.gradient-rosegold {
+  background: linear-gradient(135deg, #b76e79 0%, #e8a4ad 50%, #b76e79 100%);
+}
+
+.gradient-rose {
+  background: linear-gradient(135deg, #f43f6f 0%, #ec4899 100%);
+}
+
+.gradient-luxury {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
 }
 
 .gradient-pink {
   background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
 }
 
-/* Smooth hover animations */
+/* Rose gold shimmer effect */
+.shimmer {
+  background: linear-gradient(110deg, #b76e79 0%, #e8a4ad 45%, #b76e79 55%, #f9d4d9 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(183, 110, 121, 0.15);
+}
+
+/* Card hover */
 .card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgba(219, 39, 119, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -10px rgba(183, 110, 121, 0.15), 0 8px 16px -6px rgba(244, 63, 111, 0.1);
+}
+
+/* Rose gold glow */
+.rosegold-glow {
+  box-shadow: 0 0 20px rgba(183, 110, 121, 0.12), 0 0 40px rgba(183, 110, 121, 0.05);
 }
 
 /* Floating animation */
@@ -86,4 +132,10 @@ body {
 .animate-float-delayed {
   animation: float-delayed 5s ease-in-out infinite;
   animation-delay: 1s;
+}
+
+/* Elegant divider */
+.divider-rosegold {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #b76e79, transparent);
 }
