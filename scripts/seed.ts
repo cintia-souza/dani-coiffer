@@ -12,11 +12,11 @@ async function seed() {
 
   // Inserir config do salão
   await db.insert(salonConfig).values({
-    salonName: 'DaniCoiffer',
-    address: 'Barueri, SP',
-    phone: '(11) 99999-9999',
-    whatsapp: '11999999999',
-    pixKey: 'danicoiffer@email.com',
+    salonName: 'Dany Diniz',
+    address: 'R. Fernanda, 19 - Jardim Barueri, Barueri - SP, 06411-350',
+    phone: '(11) 97666-6767',
+    whatsapp: '11976666767',
+    pixKey: 'danydiniz@email.com',
     openingHour: '08:00',
     closingHour: '18:00',
     cancellationHours: 24,
@@ -26,8 +26,8 @@ async function seed() {
   const hashedPassword = await bcrypt.hash('123456', 10)
   await db.insert(users).values({
     name: 'Dani',
-    email: 'dani@danicoiffer.com',
-    phone: '11999999999',
+    email: 'dani@danydiniz.com',
+    phone: '11976666767',
     password: hashedPassword,
     role: 'profissional',
   })
@@ -35,8 +35,8 @@ async function seed() {
   // Inserir admin
   await db.insert(users).values({
     name: 'Admin',
-    email: 'admin@danicoiffer.com',
-    phone: '11999999999',
+    email: 'admin@danydiniz.com',
+    phone: '11976666767',
     password: hashedPassword,
     role: 'admin',
   })

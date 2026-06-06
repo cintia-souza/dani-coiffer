@@ -1,11 +1,11 @@
 {
-  "name": "DaniCoiffer - Salão de Beleza",
-  "short_name": "DaniCoiffer",
-  "description": "Agende seu horário no DaniCoiffer - Salão de Beleza em Barueri",
+  "name": "Dany Diniz - Salão de Beleza em Barueri",
+  "short_name": "Dany Diniz",
+  "description": "Agende seu horário na Dany Diniz - Cabeleireira e Salão de Beleza em Barueri, SP",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ec4899",
+  "theme_color": "#b76e79",
   "orientation": "portrait",
   "icons": [
     {

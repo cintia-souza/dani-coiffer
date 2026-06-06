@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   if (action === 'confirm') {
     await db.update(appointments).set({ status: 'confirmado' }).where(eq(appointments.id, id))
     return new NextResponse(
-      renderPage('Confirmado! ✓', 'Sua presença foi confirmada. Te esperamos no DaniCoiffer! 💖', 'success'),
+      renderPage('Confirmado! ✓', 'Sua presença foi confirmada. Te esperamos na Dany Diniz! 💖', 'success'),
       { headers: { 'Content-Type': 'text/html' } }
     )
   }
@@ -65,7 +65,7 @@ function renderPage(title: string, message: string, type: 'success' | 'error' | 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} - DaniCoiffer</title>
+  <title>${title} - Dany Diniz</title>
   <style>
     body { font-family: Arial, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #fdf2f8; }
     .card { background: white; border-radius: 20px; padding: 40px; text-align: center; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }

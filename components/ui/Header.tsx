@@ -63,8 +63,8 @@ export default function Header() {
               </svg>
             </button>
           )}
-          <Link href="/" aria-label="DaniCoiffer - Página inicial" className="text-lg font-bold shimmer hover:opacity-80 transition-all">
-            DaniCoiffer
+          <Link href="/" aria-label="Dany Diniz - Página inicial" className="text-lg font-bold shimmer hover:opacity-80 transition-all">
+            Dany Diniz
           </Link>
         </div>
 

@@ -8,12 +8,13 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DaniCoiffer | Cabeleireira e Salão de Beleza em Barueri - Agendamento Online",
-  description: "DaniCoiffer - Salão de beleza e cabeleireira em Barueri, SP. Corte feminino, coloração, escova, manicure, pedicure e hidratação. Agende online agora! Atendemos Barueri, Alphaville, Jardim Barueri e região.",
+  title: "Dany Diniz | Cabeleireira e Salão de Beleza em Barueri - Agendamento Online",
+  description: "Dany Diniz - Salão de beleza e cabeleireira em Barueri, SP. Corte feminino, coloração, escova, manicure, pedicure e hidratação. Agende online agora! Atendemos Barueri, Alphaville, Jardim Barueri e região.",
   keywords: [
     "cabeleireira Barueri",
     "salão de beleza Barueri",
-    "DaniCoiffer",
+    "Dany Diniz",
+    "Dany Diniz cabeleireira",
     "cabelereira Barueri SP",
     "manicure Barueri",
     "corte feminino Barueri",
@@ -21,18 +22,25 @@ export const metadata: Metadata = {
     "escova modelada Barueri",
     "salão Alphaville",
     "salão Jardim Barueri",
+    "cabeleireira Jardim Barueri",
     "agendamento online salão Barueri",
     "hidratação capilar Barueri",
     "pedicure Barueri",
     "melhor salão de beleza Barueri",
-    "cabeleireira perto de mim Barueri",
+    "cabeleireira perto de mim",
+    "salão de beleza perto de mim Barueri",
+    "salão de beleza Jandira",
+    "cabeleireira Osasco",
+    "salão Carapicuíba",
+    "corte e coloração Barueri",
+    "unha gel Barueri",
   ],
   manifest: "/manifest.json",
   openGraph: {
-    title: "DaniCoiffer | Cabeleireira e Salão de Beleza em Barueri",
+    title: "Dany Diniz | Cabeleireira e Salão de Beleza em Barueri",
     description: "Salão de beleza premium em Barueri. Corte, coloração, manicure e mais. Agende online!",
-    url: "https://danicoiffer.com.br",
-    siteName: "DaniCoiffer",
+    url: "https://danydiniz.com.br",
+    siteName: "Dany Diniz",
     locale: "pt_BR",
     type: "website",
   },
@@ -41,39 +49,51 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large" },
   },
-  alternates: { canonical: "https://danicoiffer.com.br" },
+  alternates: { canonical: "https://danydiniz.com.br" },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BeautySalon",
-  name: "DaniCoiffer",
+  "@id": "https://danydiniz.com.br/#salon",
+  name: "Dany Diniz",
+  alternateName: "Dany Diniz Cabeleireira",
   description: "Salão de beleza e cabeleireira em Barueri, SP. Corte feminino, coloração, escova, manicure, pedicure e hidratação capilar. Agendamento online.",
-  image: "https://danicoiffer.com.br/og-image.jpg",
+  image: "https://danydiniz.com.br/images/hero-salon.jpg",
+  logo: "https://danydiniz.com.br/icon.svg",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Rua Fernanda, 40",
+    streetAddress: "R. Fernanda, 19",
     addressLocality: "Barueri",
     addressRegion: "SP",
-    postalCode: "06440-000",
+    postalCode: "06411-350",
     addressCountry: "BR",
     neighborhood: "Jardim Barueri",
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: -23.51,
-    longitude: -46.876,
+    latitude: -23.5100,
+    longitude: -46.8760,
   },
-  url: "https://danicoiffer.com.br",
-  telephone: "+5511999999999",
+  url: "https://danydiniz.com.br",
+  telephone: "+5511976666767",
+  sameAs: [
+    "https://www.google.com/maps/place/Dany+Diniz",
+    "https://www.instagram.com/danydiniz",
+  ],
   openingHoursSpecification: [
     { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], opens: "08:00", closes: "18:00" },
   ],
   priceRange: "$$",
+  currenciesAccepted: "BRL",
+  paymentAccepted: "Cash, PIX, Credit Card",
   areaServed: [
-    { "@type": "City", name: "Barueri" },
+    { "@type": "City", name: "Barueri", "@id": "https://www.wikidata.org/wiki/Q327793" },
     { "@type": "Place", name: "Alphaville" },
     { "@type": "Place", name: "Jardim Barueri" },
+    { "@type": "Place", name: "Jandira" },
+    { "@type": "Place", name: "Osasco" },
+    { "@type": "Place", name: "Carapicuíba" },
   ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
@@ -86,6 +106,15 @@ const jsonLd = {
       { "@type": "Offer", itemOffered: { "@type": "Service", name: "Hidratação Capilar" } },
     ],
   },
+  potentialAction: {
+    "@type": "ReserveAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://danydiniz.com.br/agendar",
+      actionPlatform: ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"],
+    },
+    result: { "@type": "Reservation", name: "Agendamento Online" },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -95,8 +124,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#b76e79" />
         <meta name="geo.region" content="BR-SP" />
         <meta name="geo.placename" content="Barueri" />
-        <meta name="geo.position" content="-23.51;-46.876" />
-        <meta name="ICBM" content="-23.51, -46.876" />
+        <meta name="geo.position" content="-23.5100;-46.8760" />
+        <meta name="ICBM" content="-23.5100, -46.8760" />
+        <meta name="google-site-verification" content="" />
+        <link rel="canonical" href="https://danydiniz.com.br" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

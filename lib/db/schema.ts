@@ -52,7 +52,7 @@ export const blockedSlots = pgTable('blocked_slots', {
 
 export const salonConfig = pgTable('salon_config', {
   id: uuid('id').primaryKey().defaultRandom(),
-  salonName: text('salon_name').notNull().default('DaniCoiffer'),
+  salonName: text('salon_name').notNull().default('Dany Diniz'),
   address: text('address'),
   phone: text('phone'),
   whatsapp: text('whatsapp'),

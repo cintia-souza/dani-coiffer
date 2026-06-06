@@ -1,8 +1,13 @@
 import Link from 'next/link'
 import AnimatedHero from '@/components/ui/AnimatedHero'
 import { NailArtIllustration, SpaIllustration, MirrorIllustration } from '@/components/ui/Illustrations'
+import { getSalonConfig } from '@/lib/client-actions'
 
-export default function Home() {
+export default async function Home() {
+  const config = await getSalonConfig()
+  const openingHour = config?.openingHour?.slice(0, 5) || '08:00'
+  const closingHour = config?.closingHour?.slice(0, 5) || '18:00'
+
   return (
     <main className="flex-1">
       {/* Hero */}
@@ -120,7 +125,7 @@ export default function Home() {
             { q: 'Posso cancelar meu agendamento?', a: 'Sim! Você pode cancelar com até 24 horas de antecedência pela sua área "Meus Agendamentos".' },
             { q: 'Quais formas de pagamento?', a: 'Aceitamos PIX, dinheiro e cartão. O QR Code do PIX está disponível na página de Preços.' },
             { q: 'Preciso criar conta para agendar?', a: 'Sim, mas é super rápido! Basta nome, e-mail, telefone e uma senha. Leva menos de 1 minuto.' },
-            { q: 'Onde fica o salão?', a: 'Estamos na Rua Fernanda, 40 — Jardim Barueri, SP. Fácil acesso para quem vem de Alphaville e região.' },
+            { q: 'Onde fica o salão?', a: 'Estamos na R. Fernanda, 19 — Jardim Barueri, SP, CEP 06411-350. Fácil acesso para quem vem de Alphaville e região.' },
           ].map((item, i) => (
             <details key={i} className="group bg-white rounded-2xl border border-rosegold-100 shadow-sm overflow-hidden">
               <summary className="flex items-center justify-between px-6 py-4 cursor-pointer list-none hover:bg-rosegold-50/50 transition-colors">
@@ -150,14 +155,14 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             <div className="rounded-3xl overflow-hidden shadow-md border border-rosegold-100 h-72 md:h-auto">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.5!2d-46.876!3d-23.51!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMwJzM2LjAiUyA0NsKwNTInMzMuNiJX!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr&q=Rua+Fernanda+40+Jardim+Barueri+SP"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.5!2d-46.876!3d-23.51!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMwJzM2LjAiUyA0NsKwNTInMzMuNiJX!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr&q=R+Fernanda+19+Jardim+Barueri+SP"
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: '288px' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Localização DaniCoiffer - Rua Fernanda 40, Jardim Barueri"
+                title="Localização Dany Diniz - R. Fernanda 19, Jardim Barueri"
               />
             </div>
 
@@ -169,7 +174,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800">Endereço</p>
-                    <p className="text-sm text-gray-500">Rua Fernanda, 40 — Jardim Barueri, SP</p>
+                    <p className="text-sm text-gray-500">R. Fernanda, 19 — Jardim Barueri, SP</p>
                   </div>
                 </div>
 
@@ -179,7 +184,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800">Horário de Funcionamento</p>
-                    <p className="text-sm text-gray-500">Segunda a Sábado: 08h às 18h</p>
+                    <p className="text-sm text-gray-500">Segunda a Sábado: {openingHour}h às {closingHour}h</p>
                     <p className="text-sm text-gray-400">Domingo: Fechado</p>
                   </div>
                 </div>
@@ -190,13 +195,13 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800">Contato</p>
-                    <p className="text-sm text-gray-500">(11) 99999-9999</p>
+                    <p className="text-sm text-gray-500">(11) 97666-6767</p>
                   </div>
                 </div>
               </div>
 
               <a
-                href="https://www.google.com/maps/search/Rua+Fernanda+40+Jardim+Barueri+SP"
+                href="https://www.google.com/maps/search/R+Fernanda+19+Jardim+Barueri+SP"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Abrir no Google Maps"
@@ -231,15 +236,15 @@ export default function Home() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <p className="font-bold text-xl mb-3">
-              <span className="shimmer">DaniCoiffer</span>
+              <span className="shimmer">Dany Diniz</span>
             </p>
             <p className="text-sm text-gray-400 leading-relaxed">Salão de Beleza premium em Barueri, SP. Cuidando da sua beleza com carinho, profissionalismo e sofisticação.</p>
           </div>
           <div>
             <p className="font-semibold text-rosegold-300 text-sm mb-4 tracking-wide uppercase">Contato</p>
-            <p className="text-sm text-gray-400">Rua Fernanda, 40 — Jardim Barueri, SP</p>
-            <p className="text-sm text-gray-400 mt-1">(11) 99999-9999</p>
-            <p className="text-sm text-gray-400 mt-1">Seg a Sáb: 08h às 18h</p>
+            <p className="text-sm text-gray-400">R. Fernanda, 19 — Jardim Barueri, SP</p>
+            <p className="text-sm text-gray-400 mt-1">(11) 97666-6767</p>
+            <p className="text-sm text-gray-400 mt-1">Seg a Sáb: {openingHour}h às {closingHour}h</p>
           </div>
           <div>
             <p className="font-semibold text-rosegold-300 text-sm mb-4 tracking-wide uppercase">Navegação</p>
@@ -252,7 +257,7 @@ export default function Home() {
           </div>
         </div>
         <div className="max-w-5xl mx-auto mt-10 pt-6 border-t border-gray-800 text-center">
-          <p className="text-xs text-gray-500">© {new Date().getFullYear()} DaniCoiffer — Salão de Beleza em Barueri, SP. Todos os direitos reservados.</p>
+          <p className="text-xs text-gray-500">© {new Date().getFullYear()} Dany Diniz — Salão de Beleza em Barueri, SP. Todos os direitos reservados.</p>
         </div>
       </footer>
     </main>
