@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
       // WhatsApp (prioridade)
       if (client.phone) {
         try {
-          const sent = await sendWhatsAppReminder24h({ ...baseData, clientPhone: client.phone, clientEmail: client.email || '' })
+          const sent = await sendWhatsAppReminder24h({ ...baseData, clientPhone: client.phone })
           if (sent) whatsapp24h++
         } catch (e) {
           console.error(`Erro WhatsApp 24h para ${client.phone}:`, e)
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
       // WhatsApp (prioridade)
       if (client.phone) {
         try {
-          const sent = await sendWhatsAppReminder2h({ ...baseData, clientPhone: client.phone, clientEmail: client.email || '' })
+          const sent = await sendWhatsAppReminder2h({ ...baseData, clientPhone: client.phone })
           if (sent) whatsapp2h++
         } catch (e) {
           console.error(`Erro WhatsApp 2h para ${client.phone}:`, e)
