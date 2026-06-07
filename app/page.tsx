@@ -1,12 +1,23 @@
 import Link from 'next/link'
 import AnimatedHero from '@/components/ui/AnimatedHero'
-import { NailArtIllustration, SpaIllustration, MirrorIllustration } from '@/components/ui/Illustrations'
 import { getSalonConfig } from '@/lib/client-actions'
+import Image from 'next/image'
 
 export default async function Home() {
   const config = await getSalonConfig()
   const openingHour = config?.openingHour?.slice(0, 5) || '08:00'
   const closingHour = config?.closingHour?.slice(0, 5) || '18:00'
+  const workDays = (config as any)?.workDays || '1,2,3,4,5,6'
+  const heroImage = (config as any)?.heroImage || '/images/hero-salon.jpg'
+  const serviceImage1 = (config as any)?.serviceImage1 || '/images/nails.jpg'
+  const serviceImage2 = (config as any)?.serviceImage2 || '/images/hair.jpg'
+  const serviceImage3 = (config as any)?.serviceImage3 || '/images/makeup.jpg'
+
+  const dayNames: Record<string, string> = { '0': 'Dom', '1': 'Seg', '2': 'Ter', '3': 'Qua', '4': 'Qui', '5': 'Sex', '6': 'Sáb' }
+  const days = workDays.split(',').filter(Boolean)
+  const closedDays = ['0','1','2','3','4','5','6'].filter((d: string) => !days.includes(d))
+  const openDaysLabel = days.length === 7 ? 'Todos os dias' : days.length === 6 && !days.includes('0') ? 'Segunda a Sábado' : days.map((d: string) => dayNames[d]).join(', ')
+  const closedDaysLabel = closedDays.length === 0 ? null : closedDays.map((d: string) => dayNames[d]).join(', ')
 
   return (
     <main className="flex-1">
@@ -43,7 +54,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="flex-1 flex justify-center">
-            <AnimatedHero className="w-64 h-64 md:w-80 md:h-80" />
+            <AnimatedHero className="w-64 h-64 md:w-80 md:h-80" image={heroImage} />
           </div>
         </div>
 
@@ -64,19 +75,25 @@ export default async function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="card-hover bg-white rounded-3xl p-8 border border-rosegold-100 shadow-sm text-center rosegold-glow">
-            <NailArtIllustration className="w-28 h-28 mx-auto mb-5" />
+            <div className="w-28 h-28 mx-auto mb-5 relative rounded-2xl overflow-hidden">
+              <Image src={serviceImage1} alt="Manicure e nail art em Barueri" fill className="object-cover" sizes="112px" />
+            </div>
             <h3 className="font-bold text-gray-800 text-lg mb-2">Unhas</h3>
             <p className="text-gray-500 text-sm">Manicure, pedicure e nail art com acabamento perfeito</p>
           </div>
 
           <div className="card-hover bg-white rounded-3xl p-8 border border-rosegold-100 shadow-sm text-center rosegold-glow">
-            <SpaIllustration className="w-28 h-28 mx-auto mb-5" />
+            <div className="w-28 h-28 mx-auto mb-5 relative rounded-2xl overflow-hidden">
+              <Image src={serviceImage2} alt="Corte e tratamento capilar em Barueri" fill className="object-cover" sizes="112px" />
+            </div>
             <h3 className="font-bold text-gray-800 text-lg mb-2">Cabelo</h3>
             <p className="text-gray-500 text-sm">Corte, coloração, hidratação e escova modelada</p>
           </div>
 
           <div className="card-hover bg-white rounded-3xl p-8 border border-rosegold-100 shadow-sm text-center rosegold-glow">
-            <MirrorIllustration className="w-28 h-28 mx-auto mb-5" />
+            <div className="w-28 h-28 mx-auto mb-5 relative rounded-2xl overflow-hidden">
+              <Image src={serviceImage3} alt="Maquiagem e estética em Barueri" fill className="object-cover" sizes="112px" />
+            </div>
             <h3 className="font-bold text-gray-800 text-lg mb-2">Estética</h3>
             <p className="text-gray-500 text-sm">Maquiagem, design de sobrancelhas e tratamentos faciais</p>
           </div>
@@ -184,8 +201,8 @@ export default async function Home() {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-800">Horário de Funcionamento</p>
-                    <p className="text-sm text-gray-500">Segunda a Sábado: {openingHour}h às {closingHour}h</p>
-                    <p className="text-sm text-gray-400">Domingo: Fechado</p>
+                    <p className="text-sm text-gray-500">{openDaysLabel}: {openingHour}h às {closingHour}h</p>
+                    {closedDaysLabel && <p className="text-sm text-gray-400">{closedDaysLabel}: Fechado</p>}
                   </div>
                 </div>
 
@@ -244,7 +261,7 @@ export default async function Home() {
             <p className="font-semibold text-rosegold-300 text-sm mb-4 tracking-wide uppercase">Contato</p>
             <p className="text-sm text-gray-400">R. Fernanda, 19 — Jardim Barueri, SP</p>
             <p className="text-sm text-gray-400 mt-1">(11) 97666-6767</p>
-            <p className="text-sm text-gray-400 mt-1">Seg a Sáb: {openingHour}h às {closingHour}h</p>
+            <p className="text-sm text-gray-400 mt-1">{openDaysLabel}: {openingHour}h às {closingHour}h</p>
           </div>
           <div>
             <p className="font-semibold text-rosegold-300 text-sm mb-4 tracking-wide uppercase">Navegação</p>

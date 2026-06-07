@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, Star } from 'lucide-react'
 import Image from 'next/image'
 
-export default function AnimatedHero({ className }: { className?: string }) {
+export default function AnimatedHero({ className, image }: { className?: string; image?: string }) {
   return (
     <div className={`relative ${className}`}>
       <motion.div
@@ -16,7 +16,7 @@ export default function AnimatedHero({ className }: { className?: string }) {
       <div className="relative w-full h-full flex items-center justify-center">
         <div className="w-[85%] h-[85%] rounded-full overflow-hidden border-4 border-rosegold-200 shadow-xl shadow-rosegold-200/30 relative">
           <Image
-            src="/images/hero-salon.jpg"
+            src={image || '/images/hero-salon.jpg'}
             alt="Salão de beleza DaniCoiffer em Barueri"
             fill
             className="object-cover"

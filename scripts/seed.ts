@@ -19,6 +19,7 @@ async function seed() {
     pixKey: 'danydiniz@email.com',
     openingHour: '08:00',
     closingHour: '18:00',
+    workDays: '1,2,3,4,5,6',
     cancellationHours: 24,
   })
 

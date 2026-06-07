@@ -59,7 +59,12 @@ export const salonConfig = pgTable('salon_config', {
   pixKey: text('pix_key'),
   openingHour: time('opening_hour').default('08:00'),
   closingHour: time('closing_hour').default('18:00'),
+  workDays: text('work_days').default('1,2,3,4,5,6'),
   cancellationHours: integer('cancellation_hours').default(24),
+  heroImage: text('hero_image'),
+  serviceImage1: text('service_image_1'),
+  serviceImage2: text('service_image_2'),
+  serviceImage3: text('service_image_3'),
 })
 
 // Galeria de fotos dos profissionais

@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { appointments, users, services } from '@/lib/db/schema'
 import { eq, and, or } from 'drizzle-orm'
 import { sendReminder24h, sendReminder2h } from '@/lib/email'
+import { sendWhatsAppReminder24h, sendWhatsAppReminder2h } from '@/lib/whatsapp'
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
@@ -13,15 +14,15 @@ export async function GET(request: NextRequest) {
   const now = new Date()
   const today = now.toISOString().split('T')[0]
 
-  // Calcular amanhã
   const tomorrow = new Date(now)
   tomorrow.setDate(tomorrow.getDate() + 1)
   const tomorrowStr = tomorrow.toISOString().split('T')[0]
 
   let sent24h = 0
   let sent2h = 0
+  let whatsapp24h = 0
+  let whatsapp2h = 0
 
-  // Buscar agendamentos pendentes de lembrete
   const pendingAppointments = await db
     .select({
       id: appointments.id,
@@ -43,16 +44,14 @@ export async function GET(request: NextRequest) {
     )
 
   for (const apt of pendingAppointments) {
-    // Buscar dados
-    const [client] = await db.select({ name: users.name, email: users.email }).from(users).where(eq(users.id, apt.clientId)).limit(1)
+    const [client] = await db.select({ name: users.name, email: users.email, phone: users.phone }).from(users).where(eq(users.id, apt.clientId)).limit(1)
     const [professional] = await db.select({ name: users.name }).from(users).where(eq(users.id, apt.professionalId)).limit(1)
     const [service] = await db.select({ name: services.name }).from(services).where(eq(services.id, apt.serviceId)).limit(1)
 
-    if (!client?.email) continue
+    if (!client) continue
 
-    const reminderData = {
+    const baseData = {
       clientName: client.name,
-      clientEmail: client.email,
       serviceName: service?.name || 'Serviço',
       professionalName: professional?.name || 'Profissional',
       date: apt.date,
@@ -60,32 +59,60 @@ export async function GET(request: NextRequest) {
       appointmentId: apt.id,
     }
 
-    // Lembrete 24h: agendamentos de AMANHÃ que ainda não receberam
+    // Lembrete 24h
     if (apt.date === tomorrowStr && !apt.reminder24hSent) {
-      try {
-        await sendReminder24h(reminderData)
-        await db.update(appointments).set({ reminder24hSent: true }).where(eq(appointments.id, apt.id))
-        sent24h++
-      } catch (e) {
-        console.error(`Erro lembrete 24h para ${client.email}:`, e)
+      // WhatsApp (prioridade)
+      if (client.phone) {
+        try {
+          const sent = await sendWhatsAppReminder24h({ ...baseData, clientPhone: client.phone, clientEmail: client.email || '' })
+          if (sent) whatsapp24h++
+        } catch (e) {
+          console.error(`Erro WhatsApp 24h para ${client.phone}:`, e)
+        }
       }
+
+      // Email (complementar)
+      if (client.email) {
+        try {
+          await sendReminder24h({ ...baseData, clientEmail: client.email })
+          sent24h++
+        } catch (e) {
+          console.error(`Erro email 24h para ${client.email}:`, e)
+        }
+      }
+
+      await db.update(appointments).set({ reminder24hSent: true }).where(eq(appointments.id, apt.id))
     }
 
-    // Lembrete 2h: agendamentos de HOJE (manhã) que ainda não receberam
+    // Lembrete 2h
     if (apt.date === today && !apt.reminder2hSent) {
-      try {
-        await sendReminder2h(reminderData)
-        await db.update(appointments).set({ reminder2hSent: true }).where(eq(appointments.id, apt.id))
-        sent2h++
-      } catch (e) {
-        console.error(`Erro lembrete 2h para ${client.email}:`, e)
+      // WhatsApp (prioridade)
+      if (client.phone) {
+        try {
+          const sent = await sendWhatsAppReminder2h({ ...baseData, clientPhone: client.phone, clientEmail: client.email || '' })
+          if (sent) whatsapp2h++
+        } catch (e) {
+          console.error(`Erro WhatsApp 2h para ${client.phone}:`, e)
+        }
       }
+
+      // Email (complementar)
+      if (client.email) {
+        try {
+          await sendReminder2h({ ...baseData, clientEmail: client.email })
+          sent2h++
+        } catch (e) {
+          console.error(`Erro email 2h para ${client.email}:`, e)
+        }
+      }
+
+      await db.update(appointments).set({ reminder2hSent: true }).where(eq(appointments.id, apt.id))
     }
   }
 
   return NextResponse.json({
     success: true,
-    sent: { reminder24h: sent24h, reminder2h: sent2h },
+    sent: { email24h: sent24h, email2h: sent2h, whatsapp24h, whatsapp2h },
     checked: pendingAppointments.length,
     date: today,
   })

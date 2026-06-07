@@ -219,6 +219,56 @@ export async function updateAppointmentStatus(id: string, status: 'agendado' | '
   return { success: true }
 }
 
+// === CONFIGURAÇÕES DO SALÃO ===
+
+export async function updateSalonConfig(data: {
+  salonName: string
+  address: string
+  phone: string
+  whatsapp: string
+  pixKey: string
+  openingHour: string
+  closingHour: string
+  workDays: string
+  cancellationHours: number
+  heroImage?: string
+  serviceImage1?: string
+  serviceImage2?: string
+  serviceImage3?: string
+}) {
+  const session = await auth()
+  if (session?.user?.role !== 'admin') return { error: 'Sem permissão.' }
+
+  const [existing] = await db.select({ id: salonConfig.id }).from(salonConfig).limit(1)
+
+  const values = {
+    salonName: data.salonName,
+    address: data.address,
+    phone: data.phone,
+    whatsapp: data.whatsapp,
+    pixKey: data.pixKey,
+    openingHour: data.openingHour,
+    closingHour: data.closingHour,
+    workDays: data.workDays,
+    cancellationHours: data.cancellationHours,
+    heroImage: data.heroImage || null,
+    serviceImage1: data.serviceImage1 || null,
+    serviceImage2: data.serviceImage2 || null,
+    serviceImage3: data.serviceImage3 || null,
+  }
+
+  if (existing) {
+    await db.update(salonConfig).set(values).where(eq(salonConfig.id, existing.id))
+  } else {
+    await db.insert(salonConfig).values(values)
+  }
+
+  revalidatePath('/')
+  revalidatePath('/precos')
+  revalidatePath('/configuracoes')
+  return { success: true }
+}
+
 // === DASHBOARD STATS ===
 
 export async function getDashboardStats() {
